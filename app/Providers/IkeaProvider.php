@@ -8,12 +8,27 @@ class IkeaProvider
 
     }
 
-    public function getOkazje(array $queries): array
+
+    public function getOkazje(array $queries): array {
+        $allProducts = [];
+        foreach($queries as $query) {
+            $queryProducts = $this->getQuery($query);
+            foreach($queryProducts as $product) {
+                if(!in_array($product['id'], array_column($allProducts, 'id'))) {
+                    $allProducts[] = $product;
+                }
+            }
+        }
+
+        return $allProducts;
+    }
+
+    public function getQuery(string $query): array
     {
         $parameters = [
             'stores' => 306,
             'size' => 64,
-            'search' => $queries[0]
+            'search' => $query
         ];
         $result = $this->getProducts($parameters, 1);
         $totalPages = $result['totalPages'];

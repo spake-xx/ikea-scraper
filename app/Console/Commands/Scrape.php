@@ -32,7 +32,7 @@ class Scrape extends Command
         $subscription = Subscription::find(1);
         $api = new IkeaProvider();
         $this->info('Skrejpowanie...');
-        $products = $api->getOkazje(['metod']);
+        $products = $api->getOkazje($subscription->queries);
         $lastFetchedProducts = Result::orderBy('id', 'desc')->first();
         $newProducts = $products;
         if(!empty($lastFetchedProducts)) {
@@ -58,7 +58,7 @@ class Scrape extends Command
 <a href='{productLink}'>🔗 Link do produktu</a>
         ";
         foreach($newProducts as $product){
-            $telegramBot->sendPhoto(1751230938, $product['heroImage']);
+            $this->info('Discovered new product. Sending ' . $product['title'] . ' - ' . $product['description']);
             $data = [
                 '{productTitle}' => $product['title'],
                 '{productDescription}' => $product['description'],
@@ -69,7 +69,10 @@ class Scrape extends Command
                 '{currency}' => $product['currency'],
                 '{productLink}' => 'https://www.ikea.com/pl/pl/customer-service/services/okazje-na-okraglo-pub63b48c50/#/katowice/' . $product['id'],
             ];
-            $telegramBot->sendMessage(1751230938, strtr($template, $data));
+            foreach($subscription->send_to as $chatId) {
+                $telegramBot->sendPhoto($chatId, $product['heroImage']);
+                $telegramBot->sendMessage($chatId, strtr($template, $data));
+            }
         }
     }
 }

@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Providers;
+
+class IkeaProvider
+{
+    public function __construct() {
+
+    }
+
+    public function getOkazje(array $queries): array
+    {
+        $parameters = [
+            'stores' => 306,
+            'size' => 64,
+            'search' => $queries[0]
+        ];
+        $result = $this->getProducts($parameters, 1);
+        $totalPages = $result['totalPages'];
+        $products = $result['content'];
+        for ($i = 0; $i < $totalPages; $i++) {
+            $result = $this->getProducts($parameters, $i);
+            $products = array_merge($products, $result['content']);
+        }
+
+        return $products;
+    }
+
+    public function getProducts($parameters, $page): array {
+        $url = 'https://web-api.ikea.com/circular/circular-asis/offers/public/pl/pl?page='.$page;
+        $fullUrl = $url .'&'. http_build_query($parameters);
+        // retrieve json using guzzle
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', $fullUrl);
+        $response = $response->getBody()->getContents();
+        $serializer = new \JMS\Serializer\SerializerBuilder();
+        $serializer = $serializer->build();
+        $response = $serializer->deserialize($response, 'array', 'json');
+        return $response;
+    }
+}

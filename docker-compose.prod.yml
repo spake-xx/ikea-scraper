@@ -1,0 +1,19 @@
+services:
+  nginx:
+    image: nginx:1-alpine
+    volumes:
+      - www_data:/var/www/html
+    networks:
+      - nginx-proxy-manager
+  php-fpm:
+    image: php:8.4-fpm-alpine
+    depends_on:
+      - nginx
+    volumes:
+      - www_data:/var/www/html
+    networks:
+      - nginx-proxy-manager
+networks:
+  nginx-proxy-manager:
+      external: true
+      name: nginx-proxy-manager_default

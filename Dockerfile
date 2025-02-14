@@ -20,6 +20,5 @@ WORKDIR /var/www/html
 RUN composer install
 
 ENTRYPOINT ["build/entrypoint.sh"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
 EXPOSE 80

@@ -1,5 +1,7 @@
 FROM php:8.4-fpm-alpine
 
+USER www-data
+
 RUN apk add nginx supervisor sqlite-dev curl-dev
 
 RUN docker-php-ext-install pdo_sqlite

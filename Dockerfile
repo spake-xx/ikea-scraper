@@ -18,9 +18,8 @@ RUN composer install
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
+RUN adduser nginx www-data
 
 ENTRYPOINT ["build/entrypoint.sh"]
-
-USER www-data
 
 EXPOSE 80

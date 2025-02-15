@@ -38,6 +38,7 @@ return [
     'telegram' => [
         'bot_api_key' => env('TELEGRAM_BOT_API_KEY'),
         'bot_username' => env('TELEGRAM_BOT_USERNAME'),
+        'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
     ]
 
 ];

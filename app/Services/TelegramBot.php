@@ -15,6 +15,7 @@ class TelegramBot
             config('services.telegram.bot_api_key'),
             config('services.telegram.bot_username')
         );
+        $this->telegram->addCommandsPath('/app/Services/TelegramCommands');
     }
 
     public function setWebhook($url)

@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Services\TelegramCommands\AddCommand;
+use App\Services\TelegramCommands\channelpostCommand;
 use App\Services\TelegramCommands\ListCommand;
-use App\Services\TelegramCommands\RemoveCommand;
+use Illuminate\Support\Facades\Log;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Exception\TelegramException;
 
@@ -18,8 +18,7 @@ class TelegramBot
             config('services.telegram.bot_api_key'),
             config('services.telegram.bot_username')
         );
-        // $this->telegram->addCommandsPath(app_path('Services/TelegramCommands'));
-        $this->telegram->addCommandClasses([ListCommand::class, AddCommand::class, RemoveCommand::class]);
+        $this->telegram->setCommandsPath(app_path('Services/TelegramCommands'));
     }
 
     public function setWebhook($url)
@@ -51,6 +50,7 @@ class TelegramBot
     public function handle()
     {
         $this->telegram->handle();
+        Log::info('handled');
         return true;
     }
 

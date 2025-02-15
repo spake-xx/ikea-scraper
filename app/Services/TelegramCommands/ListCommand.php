@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use App\Models\Subscription;
+use Illuminate\Support\Facades\Log;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
@@ -34,6 +35,7 @@ class ListCommand extends SystemCommand
      */
     public function execute(): ServerResponse
     {
+        Log::info('ListCommand executed');
         $message = $this->getMessage();
         $user_id = $message->getFrom()->getId();
         $command = $message->getCommand();

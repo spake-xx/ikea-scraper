@@ -46,12 +46,8 @@ class TelegramBot
 
     public function handle()
     {
-        try {
-            $this->telegram->handle();
-            return true;
-        } catch (TelegramException $e) {
-            return false;
-        }
+        $this->telegram->handle();
+        return true;
     }
 
     public function sendMessage($chatId, $text, $parseMode = 'HTML', $disableWebPagePreview = true)

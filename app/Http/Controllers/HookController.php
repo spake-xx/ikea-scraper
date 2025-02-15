@@ -17,7 +17,10 @@ class HookController extends Controller {
             abort(401);
         }
         
-        $this->telegramBot->handle();
-        return response()->json(['status' => 'ok']);
+        if($this->telegramBot->handle()) {
+            return response()->json(['status' => 'ok']);
+        } else {
+            abort(500);
+        }
     }
 }

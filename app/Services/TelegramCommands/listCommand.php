@@ -8,12 +8,12 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 
-class ListCommand extends SystemCommand
+class listCommand extends SystemCommand
 {
     /**
      * @var string
      */
-    protected $name = 'List';
+    protected $name = 'list';
 
     protected $usage = '/list';
 
@@ -41,6 +41,9 @@ class ListCommand extends SystemCommand
         $command = $message->getCommand();
 
         $subscription = Subscription::find(1);
+        if (!$subscription) {
+            return $this->replyToChat("Nie ma żadnych śledzonych obecnie przedmiotów.");
+        }
         return $this->replyToChat("Lista przedmiotów w bazie: " . PHP_EOL . implode("," . PHP_EOL, $subscription->queries));
     }
 }

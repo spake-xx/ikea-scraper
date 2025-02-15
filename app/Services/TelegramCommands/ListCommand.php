@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Request;
 
 class ListCommand extends SystemCommand
 {
@@ -37,13 +38,18 @@ class ListCommand extends SystemCommand
     {
         Log::info('ListCommand executed');
         $message = $this->getChannelPost();
-        $user_id = $message->getFrom()->getId();
         $command = $message->getCommand();
 
         $subscription = Subscription::find(1);
         if (!$subscription) {
-            return $this->replyToChat("Nie ma żadnych śledzonych obecnie przedmiotów." . $command);
+            return Request::sendMessage([
+                'chat_id' => '-1002252043619',
+                'text' => "Nie ma żadnych śledzonych obecnie przedmiotów." . $command,
+            ]);
         }
-        return $this->replyToChat("Lista przedmiotów w bazie: " . PHP_EOL . implode("," . PHP_EOL, $subscription->queries));
+        return Request::sendMessage([
+            'chat_id' => '-1002252043619',
+            'text' => "Nie ma żadnych śledzonych obecnie przedmiotów." . $command,
+        ]);    
     }
 }

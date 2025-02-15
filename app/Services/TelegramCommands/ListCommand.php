@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace App\Services\TelegramCommands;
 
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Log;
@@ -8,19 +8,19 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 
-class addCommand extends SystemCommand
+class ListCommand extends SystemCommand
 {
     /**
      * @var string
      */
-    protected $name = 'add';
+    protected $name = 'List';
 
-    protected $usage = '/add';
+    protected $usage = '/list';
 
     /**
      * @var string
      */
-    protected $description = 'Dodaj nowy przedmiot do śledzenia.';
+    protected $description = 'Lista przedmiotów, o których dostajesz powiadomienia.';
 
     /**
      * @var string
@@ -35,10 +35,15 @@ class addCommand extends SystemCommand
      */
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();
+        Log::info('ListCommand executed');
+        $message = $this->getChannelPost();
         $user_id = $message->getFrom()->getId();
         $command = $message->getCommand();
 
-        return $this->replyToChat("Przedmiot został dodany.");
+        $subscription = Subscription::find(1);
+        if (!$subscription) {
+            return $this->replyToChat("Nie ma żadnych śledzonych obecnie przedmiotów." . $command);
+        }
+        return $this->replyToChat("Lista przedmiotów w bazie: " . PHP_EOL . implode("," . PHP_EOL, $subscription->queries));
     }
 }

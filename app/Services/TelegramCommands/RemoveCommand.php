@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace App\Services\TelegramCommands;
 
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Log;
@@ -8,19 +8,19 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 
-class listCommand extends SystemCommand
+class RemoveCommand extends SystemCommand
 {
     /**
      * @var string
      */
-    protected $name = 'list';
+    protected $name = 'Remove';
 
-    protected $usage = '/list';
+    protected $usage = '/remove';
 
     /**
      * @var string
      */
-    protected $description = 'Lista przedmiotów, o których dostajesz powiadomienia.';
+    protected $description = 'Usuń przedmiot.';
 
     /**
      * @var string
@@ -35,7 +35,6 @@ class listCommand extends SystemCommand
      */
     public function execute(): ServerResponse
     {
-        Log::info('ListCommand executed');
         $message = $this->getMessage();
         $user_id = $message->getFrom()->getId();
         $command = $message->getCommand();
